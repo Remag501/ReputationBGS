@@ -1,3 +1,7 @@
+conversion:
+  buy-rate: 0.5    # 1 currency = 0.5 reputation points
+  sell-rate: 0.2   # 1 currency = 0.2 reputation points
+
 traders:
   - amy
   - brick

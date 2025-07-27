@@ -13,11 +13,19 @@ public class ReputationCore {
     private final List<String> npcList;
     private final FileConfiguration reputationData;
     private final PermissionUtil permissionUtil;
+    private final double buyRate;
+    private final double sellRate;
 
     public ReputationCore(FileConfiguration reputationData, List<String> npcList, PermissionUtil permissionUtil) {
         this.reputationData = reputationData;
         this.npcList = npcList;
         this.permissionUtil = permissionUtil;
+
+        // Read from main config (not reputation.yml)
+        FileConfiguration mainConfig = Bukkit.getPluginManager().getPlugin("Reputation").getConfig();
+        this.buyRate = mainConfig.getDouble("conversion.buy-rate", 0.5);
+        this.sellRate = mainConfig.getDouble("conversion.sell-rate", 0.2);
+
         loadReputation();
     }
 
@@ -93,6 +101,14 @@ public class ReputationCore {
                 reputationData.set("reputation." + uuidString + "." + npcEntry.getKey(), npcEntry.getValue());
             }
         }
+    }
+
+    public double getBuyRate() {
+        return buyRate;
+    }
+
+    public double getSellRate() {
+        return sellRate;
     }
 
     public List<String> getNpcList() {
