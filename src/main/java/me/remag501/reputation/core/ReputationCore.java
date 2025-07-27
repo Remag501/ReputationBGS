@@ -2,6 +2,8 @@ package me.remag501.reputation.core;
 
 import me.remag501.reputation.util.PermissionUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -15,6 +17,10 @@ public class ReputationCore {
     private final PermissionUtil permissionUtil;
     private final double buyRate;
     private final double sellRate;
+    private final String msgGain;
+    private final String msgLoss;
+    private final Sound soundGain;
+    private final Sound soundLoss;
 
     public ReputationCore(FileConfiguration reputationData, List<String> npcList, PermissionUtil permissionUtil) {
         this.reputationData = reputationData;
@@ -26,7 +32,26 @@ public class ReputationCore {
         this.buyRate = mainConfig.getDouble("conversion.buy-rate", 0.5);
         this.sellRate = mainConfig.getDouble("conversion.sell-rate", 0.2);
 
+        // load custom messages and sounds
+        this.msgGain = mainConfig.getString("messages.reputation-gain", "&aYou gained &e%amount% rep with &b%dealer%!");
+        this.msgLoss = mainConfig.getString("messages.reputation-loss", "&cYou lost &e%amount% rep with &b%dealer%!");
+
+        this.soundGain = Sound.valueOf(mainConfig.getString("sounds.gain", "ENTITY_PLAYER_LEVELUP"));
+        this.soundLoss = Sound.valueOf(mainConfig.getString("sounds.loss", "ENTITY_VILLAGER_NO"));
+
+
         loadReputation();
+    }
+
+    private void sendFeedback(Player player, int amount, String dealer, boolean isGain) {
+        String messageTemplate = isGain ? msgGain : msgLoss;
+        String message = messageTemplate
+                .replace("%amount%", String.valueOf(amount))
+                .replace("%dealer%", dealer);
+
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+
+        player.playSound(player.getLocation(), isGain ? soundGain : soundLoss, 1f, 1f);
     }
 
     public boolean isValidNpc(String npc) {
@@ -46,6 +71,7 @@ public class ReputationCore {
         repMap.put(npc, newRep);
         saveReputation();
         permissionUtil.applyPermissions(player, npc, newRep); // Apply permissions
+        sendFeedback(player, amount, npc, true);
     }
 
     public void removeReputation(Player player, String npc, int amount) {
@@ -55,6 +81,7 @@ public class ReputationCore {
         repMap.put(npc, newRep);
         saveReputation();
         permissionUtil.applyPermissions(player, npc, newRep); // Apply permissions
+        sendFeedback(player, amount, npc, false);
     }
 
     public void setReputation(Player player, String npc, int value) {

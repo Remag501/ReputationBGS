@@ -94,17 +94,13 @@ public class PermissionUtil {
     }
 
     public void applyPermissions(Player player, String dealer, int playerRep) {
-        player.sendMessage("reached 1");
         Map<String, Integer> perms = dealerPermissions.get(dealer.toLowerCase());
-        player.sendMessage(dealerPermissions.toString());
         if (perms == null) return;
-        player.sendMessage("reached 2");
         for (Map.Entry<String, Integer> entry : perms.entrySet()) {
             String permission = entry.getKey();
             int requiredRep = entry.getValue();
 
             if (playerRep >= requiredRep) {
-                player.sendMessage("reached");
                 // Grant
                 player.addAttachment(Bukkit.getPluginManager().getPlugin("Reputation"), permission, true);
             } else {
