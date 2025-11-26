@@ -5,6 +5,7 @@ import me.remag501.reputation.listener.PlayerListener;
 import me.remag501.reputation.manager.ReputationManager;
 import me.remag501.reputation.manager.DealerManager;
 import me.remag501.reputation.manager.PermissionManager;
+import me.remag501.reputation.placeholder.ReputationPlaceholder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,6 +40,15 @@ public final class Reputation extends JavaPlugin {
         if (getCommand("reputation") != null) {
             getCommand("reputation").setExecutor(new ReputationCommand(this));
         }
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new ReputationPlaceholder(reputationManager).register();
+            getLogger().info("PlaceholderAPI hooked successfully.");
+        } else {
+            getLogger().warning("PlaceholderAPI not detected. Placeholders disabled.");
+        }
+
+
     }
 
     public void reload() {

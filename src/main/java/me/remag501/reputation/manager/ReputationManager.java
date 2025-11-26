@@ -115,6 +115,11 @@ public class ReputationManager {
         return getPlayerMap(player.getUniqueId()).getOrDefault(npc, 0);
     }
 
+    public boolean isValidDealer(String dealer) {
+        return getNpcList().contains(dealer);
+    }
+
+
     // --- Load and save methods ---
 
     public void loadReputation() {

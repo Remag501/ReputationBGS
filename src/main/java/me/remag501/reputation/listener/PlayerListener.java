@@ -1,9 +1,11 @@
 package me.remag501.reputation.listener;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.remag501.reputation.Reputation;
 import me.remag501.reputation.manager.PermissionManager;
 import me.remag501.reputation.manager.ReputationManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,4 +33,5 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         plugin.getPermissionManager().removeAttachment(event.getPlayer());
     }
+
 }
