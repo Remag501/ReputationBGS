@@ -1,7 +1,7 @@
 name: ReputationBGS
 version: '${project.version}'
 main: me.remag501.reputation.Reputation
-api-version: '1.19'
+api-version: '1.21'
 depend: [PlaceholderAPI]
 
 commands:
