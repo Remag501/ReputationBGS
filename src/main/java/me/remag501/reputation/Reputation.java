@@ -6,7 +6,6 @@ import me.remag501.reputation.manager.ReputationManager;
 import me.remag501.reputation.manager.DealerManager;
 import me.remag501.reputation.manager.PermissionManager;
 import me.remag501.reputation.placeholder.ReputationPlaceholder;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,13 +23,11 @@ public final class Reputation extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Load config.yml
+        // Load config.yml and reputation.yml
         saveDefaultConfig();
-
-        // Setup reputation.yml
         createReputationFile();
 
-        // Example: load NPC list and permission util
+        // Load in managers
         dealerManager = new DealerManager(getConfig());
         permissionManager = new PermissionManager(this, getConfig());
         reputationManager = new ReputationManager(dealerManager, permissionManager, getReputationConfig(), getConfig());
@@ -38,9 +35,10 @@ public final class Reputation extends JavaPlugin {
         // Register listener
         getServer().getPluginManager().registerEvents(new PlayerListener(permissionManager, reputationManager), this);
 
+        // Register command
         getCommand("reputation").setExecutor(new ReputationCommand(this, reputationManager));
 
-
+        // Setup placeholders
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new ReputationPlaceholder(reputationManager).register();
             getLogger().info("PlaceholderAPI hooked successfully.");
@@ -48,8 +46,14 @@ public final class Reputation extends JavaPlugin {
             getLogger().warning("PlaceholderAPI not detected. Placeholders disabled.");
         }
 
-
     }
+
+    @Override
+    public void onDisable() {
+        saveReputationFile();
+    }
+
+    ///  --- Helper Functions --- ///
 
     public void reload() {
         reloadConfig();
@@ -74,11 +78,6 @@ public final class Reputation extends JavaPlugin {
 
     public FileConfiguration getReputationConfig() {
         return reputationConfig;
-    }
-
-    @Override
-    public void onDisable() {
-        saveReputationFile();
     }
 
     public void saveReputationFile() {
