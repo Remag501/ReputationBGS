@@ -4,6 +4,7 @@ import me.remag501.reputation.Reputation;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,16 +15,15 @@ public class PermissionManager {
 
     private final Map<String, Map<String, Integer>> dealerPermissions = new HashMap<>(); // dealer -> (perm -> minRep)
     private final Map<UUID, PermissionAttachment> attachments = new HashMap<>(); // player -> attachment
-    private final Reputation plugin;
+    private final Plugin plugin;
 
-    public PermissionManager(Reputation plugin) {
-        this.plugin = plugin;
-        loadConfig();
+    public PermissionManager(Plugin plugin, FileConfiguration configuration) {
+        this.plugin = plugin; // used to attach permissions
+        loadConfig(configuration);
     }
 
     /** Loads dealer permission thresholds from config.yml */
-    public void loadConfig() {
-        FileConfiguration config = plugin.getConfig();
+    public void loadConfig(FileConfiguration config) {
         dealerPermissions.clear();
 
         if (!config.isConfigurationSection("permissions")) return;
