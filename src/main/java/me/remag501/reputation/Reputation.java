@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 public final class Reputation extends JavaPlugin {
 
@@ -40,10 +41,12 @@ public final class Reputation extends JavaPlugin {
         reputationManager = new ReputationManager(dealerManager, permissionManager, getReputationConfig(), getConfig());
 
         // Register listener
-        getServer().getPluginManager().registerEvents(new PlayerListener(permissionManager, reputationManager), this);
+        new PlayerListener(eventService, permissionManager, reputationManager);
 
         // Register command
-        getCommand("reputation").setExecutor(new ReputationCommand(this, reputationManager));
+        ReputationCommand reputationCommand = new ReputationCommand(this, reputationManager);
+        getCommand("reputation").setExecutor(reputationCommand);
+        commandService.registerSubcommand("reputation", reputationCommand);
 
         // Setup placeholders
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
