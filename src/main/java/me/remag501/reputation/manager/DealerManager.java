@@ -9,10 +9,8 @@ import java.util.List;
 public class DealerManager {
 
     private List<String> dealers;
-    private FileConfiguration config;
 
     public DealerManager(FileConfiguration config) {
-        this.config = config;
         // Load and lowercase dealer names for consistency
         if (config.isList("traders")) {
             this.dealers = config.getStringList("traders").stream()
@@ -24,7 +22,6 @@ public class DealerManager {
     }
 
     public void reload(FileConfiguration config) {
-        this.config = config;
         if (config.isList("traders")) {
             this.dealers = config.getStringList("traders").stream()
                     .map(String::toLowerCase)
