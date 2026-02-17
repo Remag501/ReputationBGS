@@ -13,25 +13,23 @@ import org.bukkit.entity.Player;
 
 public class PlayerListener implements Listener {
 
-//    private final PermissionManager permissionManager;
-//    private final ReputationManager reputationManager;
-    private final Reputation plugin;
+    private final PermissionManager permissionManager;
+    private final ReputationManager reputationManager;
 
-    public PlayerListener(Reputation plugin) {
-//        this.permissionManager = plugin.getPermissionManager();
-//        this.reputationManager = plugin.getReputationManager();
-        this.plugin = plugin;
+    public PlayerListener(PermissionManager permissionManager, ReputationManager reputationManager) {
+        this.permissionManager = permissionManager;
+        this.reputationManager = reputationManager;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        plugin.getPermissionManager().applyAllPermissions(player, plugin.getReputationManager().getReputationMap(player));
+        permissionManager.applyAllPermissions(player, reputationManager.getReputationMap(player));
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        plugin.getPermissionManager().removeAttachment(event.getPlayer());
+        permissionManager.removeAttachment(event.getPlayer());
     }
 
 }

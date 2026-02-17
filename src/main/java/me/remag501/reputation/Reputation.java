@@ -30,17 +30,16 @@ public final class Reputation extends JavaPlugin {
         // Setup reputation.yml
         createReputationFile();
 
-        // Register listener
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
         // Example: load NPC list and permission util
-        dealerManager = new DealerManager(this);
-        permissionManager = new PermissionManager(this);
-        reputationManager = new ReputationManager(this);
+        dealerManager = new DealerManager(getConfig());
+        permissionManager = new PermissionManager(this, getConfig());
+        reputationManager = new ReputationManager(dealerManager, permissionManager, getReputationConfig(), getConfig());
 
-        if (getCommand("reputation") != null) {
-            getCommand("reputation").setExecutor(new ReputationCommand(this));
-        }
+        // Register listener
+        getServer().getPluginManager().registerEvents(new PlayerListener(permissionManager, reputationManager), this);
+
+        getCommand("reputation").setExecutor(new ReputationCommand(this, reputationManager));
+
 
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new ReputationPlaceholder(reputationManager).register();
@@ -54,9 +53,9 @@ public final class Reputation extends JavaPlugin {
 
     public void reload() {
         reloadConfig();
-        dealerManager.reload();
-        permissionManager.loadConfig();
-        reputationManager.reload();
+        dealerManager.reload(getConfig());
+        permissionManager.reload(getConfig());
+        reputationManager.reload(getConfig());
     }
 
     private void createReputationFile() {

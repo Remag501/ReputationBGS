@@ -10,6 +10,7 @@ import java.util.*;
 
 public class ReputationManager {
 
+    private final DealerManager dealerManager;
     private final PermissionManager permissionManager;
     private final Map<UUID, Map<String, Integer>> playersReputation = new HashMap<>();
     private final FileConfiguration reputationData;
@@ -23,14 +24,15 @@ public class ReputationManager {
     private Sound soundLoss;
 
 
-    public ReputationManager(PermissionManager permissionManager, FileConfiguration reputationData, FileConfiguration mainConfig) {
+    public ReputationManager(DealerManager dealerManager, PermissionManager permissionManager, FileConfiguration reputationData, FileConfiguration mainConfig) {
+        this.dealerManager = dealerManager;
         this.permissionManager = permissionManager;
         this.reputationData = reputationData;
-        loadConfig(mainConfig);
-        loadReputation();
+        reload(mainConfig);
     }
 
     public void reload(FileConfiguration mainConfig) {
+        npcList = dealerManager.getDealers();
         loadConfig(mainConfig);
         loadReputation();
     }

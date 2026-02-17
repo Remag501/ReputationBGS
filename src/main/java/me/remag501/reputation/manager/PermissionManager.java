@@ -19,11 +19,11 @@ public class PermissionManager {
 
     public PermissionManager(Plugin plugin, FileConfiguration configuration) {
         this.plugin = plugin; // used to attach permissions
-        loadConfig(configuration);
+        reload(configuration);
     }
 
     /** Loads dealer permission thresholds from config.yml */
-    public void loadConfig(FileConfiguration config) {
+    public void reload(FileConfiguration config) {
         dealerPermissions.clear();
 
         if (!config.isConfigurationSection("permissions")) return;
