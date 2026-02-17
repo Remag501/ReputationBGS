@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 public final class Reputation extends JavaPlugin {
+
     private ReputationManager reputationManager;
     private File reputationFile;
     private FileConfiguration reputationConfig;
@@ -78,7 +79,6 @@ public final class Reputation extends JavaPlugin {
 
     @Override
     public void onDisable() {
-//        saveConfig();
         saveReputationFile();
     }
 
@@ -90,16 +90,4 @@ public final class Reputation extends JavaPlugin {
         }
     }
 
-
-    public ReputationManager getReputationManager() {
-        return reputationManager;
-    }
-
-    public PermissionManager getPermissionManager() {
-        return permissionManager;
-    }
-
-    public DealerManager getDealerManager() {
-        return dealerManager;
-    }
 }
