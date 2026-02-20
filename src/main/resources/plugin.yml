@@ -1,5 +1,6 @@
-name: ReputationBGS
+name: ${project.name}
 version: '${project.version}'
+
 main: me.remag501.reputation.ReputationPlugin
 api-version: '1.21'
 depend: [BGSCore, PlaceholderAPI]
